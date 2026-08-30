@@ -245,14 +245,15 @@ export default function App() {
   }
 
   const resolvedProvider = analysis?.meta.mode || providerStatus?.provider;
+  const hostedPreview = providerStatus?.provider === "gemini";
   const statusLabel = providerStatus === null
-    ? "Checking local model"
+    ? "Checking AI provider"
     : providerStatus.provider === "ollama" && providerStatus.ready
       ? `Local ${providerStatus.model}`
       : providerStatus.provider === "ollama"
         ? "Local model offline"
         : providerStatus.provider === "gemini"
-          ? "Hosted Gemini preview"
+          ? "Hosted Gemini preview · Judge-accessible"
           : "Rehearsal mode";
 
   return (
@@ -278,7 +279,9 @@ export default function App() {
           <p className="eyebrow">Private, verified AI memory</p>
           <h1>Your memory stays yours.</h1>
         </div>
-        <p>Turn conversations into cited knowledge with Gemma running on your own machine. No meeting transcript needs to leave the device.</p>
+        <p>{hostedPreview
+          ? "This judge-accessible preview turns conversations into cited knowledge with Gemini. The primary product architecture runs Gemma locally through Ollama."
+          : "Turn conversations into cited knowledge with Gemma running on your own machine. No meeting transcript needs to leave the device."}</p>
       </section>
 
       <section className="workspace">
@@ -289,7 +292,9 @@ export default function App() {
           </div>
           <div className={`privacy-banner ${providerStatus?.privacy === "hosted" ? "hosted" : ""}`}>
             {providerStatus?.privacy === "hosted" ? <Cloud size={16} weight="fill" /> : <ShieldCheck size={16} weight="fill" />}
-            <span>{providerStatus?.privacy === "hosted" ? "Hosted competition preview" : "Local processing · No transcript upload"}</span>
+            <span>{providerStatus?.privacy === "hosted"
+              ? "This judging preview sends transcript text to Gemini · Production runs Gemma locally"
+              : "Local processing · No transcript upload"}</span>
           </div>
           <label className="sr-only" htmlFor="transcript">Meeting transcript</label>
           <textarea

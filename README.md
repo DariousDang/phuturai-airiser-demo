@@ -20,7 +20,9 @@ npm install
 npm run dev
 ```
 
-Open `http://localhost:4173`. The default configuration uses `AI_PROVIDER=ollama`, so transcript content is sent only to the Ollama service at `127.0.0.1`.
+Open `http://localhost:4173`. With no Gemini key configured, automatic provider
+selection uses Ollama, so transcript content is sent only to the service at
+`127.0.0.1`. The local `.env` may also set `AI_PROVIDER=ollama` explicitly.
 
 Verified on an Intel Arc B580 12 GB: Gemma 4 12B loaded fully on the GPU, produced
 the sample knowledge brief in about 28 seconds, and answered a warm grounded
