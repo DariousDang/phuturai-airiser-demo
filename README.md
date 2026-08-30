@@ -31,13 +31,18 @@ roughly 13-second model load.
 
 - `AI_PROVIDER=ollama`: primary product mode. Local Gemma, no cloud inference.
 - `AI_PROVIDER=gemini`: hosted competition preview. Requires `GEMINI_API_KEY`.
+  In AI Studio, the provider is selected automatically when its server-side
+  `GEMINI_API_KEY` secret is present and `AI_PROVIDER` is not explicitly set.
 - `DEMO_MODE=true`: transparent fixed rehearsal data without model inference.
 
 The interface labels each mode so the hosted preview is never presented as the local product.
 
 ## Google AI Studio submission
 
-An AI Studio shared app cannot access Ollama running on a judge's computer. Import this folder into Google AI Studio and configure `AI_PROVIDER=gemini` plus a server-side `GEMINI_API_KEY` for the required hosted judging link.
+An AI Studio shared app cannot access Ollama running on a judge's computer. Import
+this folder into Google AI Studio and let its server-side `GEMINI_API_KEY` select
+the hosted provider automatically. If an `AI_PROVIDER` environment value exists in
+the hosted project, set it to `gemini` or remove it; never leave it as `ollama`.
 
 Suggested import instruction:
 

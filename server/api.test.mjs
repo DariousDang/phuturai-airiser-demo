@@ -46,6 +46,31 @@ test("reports transparent rehearsal status", async () => {
   });
 });
 
+test("automatically selects hosted Gemini when AI Studio injects its server secret", async () => {
+  const result = await invoke({ environment: { GEMINI_API_KEY: "test-server-secret" } });
+  assert.equal(result.status, 200);
+  assert.deepEqual(result.body, {
+    provider: "gemini",
+    model: "gemini-3.7-flash",
+    ready: true,
+    privacy: "hosted",
+  });
+});
+
+test("an explicit local provider still wins when a Gemini key is also present", async () => {
+  const result = await invoke({
+    environment: {
+      AI_PROVIDER: "ollama",
+      GEMINI_API_KEY: "test-server-secret",
+      OLLAMA_BASE_URL: "http://127.0.0.1:1",
+    },
+  });
+  assert.equal(result.status, 200);
+  assert.equal(result.body.provider, "ollama");
+  assert.equal(result.body.ready, false);
+  assert.equal(result.body.privacy, "local");
+});
+
 test("hydrates model citations from exact transcript lines", async () => {
   const result = await invoke({
     method: "POST",

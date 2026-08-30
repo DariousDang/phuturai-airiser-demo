@@ -185,7 +185,9 @@ async function runOllama({ baseUrl, model, contextWindow, prompt, schema }) {
 
 function providerConfig(environment) {
   const demoMode = String(environment.DEMO_MODE).toLowerCase() === "true";
-  const provider = demoMode ? "demo" : String(environment.AI_PROVIDER || "ollama").toLowerCase();
+  const explicitProvider = String(environment.AI_PROVIDER || "").trim().toLowerCase();
+  const inferredProvider = environment.GEMINI_API_KEY ? "gemini" : "ollama";
+  const provider = demoMode ? "demo" : explicitProvider || inferredProvider;
   if (!new Set(["ollama", "gemini", "demo"]).has(provider)) {
     throw new Error(`Unknown AI_PROVIDER: ${provider}`);
   }
